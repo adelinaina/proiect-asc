@@ -47,10 +47,12 @@ skip_spaces:
     jmp skip_spaces
 
 check_end:
-
+    
+    ;verificare sfarsit de linie(enter)
     cmp al, 0Dh
     je end_read
 
+    ;conversia primei cifre hex(jumatatea superioara de byte)
     mov al, [si]
     cmp al, '0'
     jb invalid 
@@ -74,6 +76,7 @@ got1:
     mov bl, al
     inc si
 
+    ;conversia celei de-a doua cifre hex(jumatatea inferioara de byte)
     mov al, [si]
     cmp al, '0'
     jb invalid
@@ -93,10 +96,10 @@ digit2:
 
 got2:
 
-    or bl, al
+    or bl, al ;combinarea jumatatilor
     inc si
 
-    cmp cx, 16
+    cmp cx, 16 ;limitare la maxim 16 octeti
     jae end_read
 
     ;salvare octet
