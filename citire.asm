@@ -139,7 +139,6 @@ invalid:
     jmp read_loop
 
 end_read:
-
     mov countBytes, cl
 
     ;validare valori 8-16
@@ -147,35 +146,37 @@ end_read:
     jb bad_count
     cmp cl, 16
     ja bad_count
-    jmp exit
+    
+    ; daca e valid, treci la procesare
+    jmp start_processing
 
 bad_count:
-
     mov dx, offset msg_err
     mov ah, 09h
     int 21h
+    jmp program_end
+
+
+start_processing:
+    call PRINT_NEWLINE
     
+    ; calculeaza si afisează C + rotiri 
+    call PROCESS_STUDENT2
+    
+    ; sorteaza si afisează rezultate: sirul sortat, octetul cu cel mai mare nr de 1, pozitia octetului
+    call DISPLAY_SORTED_ARRAY
+    
+    call PRINT_NEWLINE
+    mov dx, offset msg_press_key
+    mov ah, 09h
+    int 21h
+    
+    mov ah, 07h
+    int 21h
 
-
-
-exit:
-
+program_end:
     mov ax, 4C00h
     int 21h
 
 code ends
 end start
-
-
-
-
-
-
-
-
-
-
-
-
-
-;code alexia
