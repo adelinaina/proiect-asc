@@ -1,4 +1,6 @@
 assume cs:code, ds:data
+include alexiaFunctions.asm
+
 data segment
 
     msg_input db 'Introduceti octetii in hex(8-16 valori): $'
@@ -10,6 +12,14 @@ data segment
 
     hexArray db 16 dup(?) ;sirul de octeti convertiti
     countBytes db 0 ;numarul de octeti cititi
+
+    ;mesaje pentru afisari necesare
+    msg_sorted      db 'Sirul sortat: $'
+    msg_position    db 'Pozitia octetului: $'
+    msg_space  db '  $'
+    msg_binary      db 'In binar: $'
+    msg_hex         db 'In hex: $'
+    msg_press_key   db 'Apasa orice tasta... $'
 
 data ends
 
@@ -112,3 +122,9 @@ end start
 
 
 
+
+
+
+
+
+;code alexia
