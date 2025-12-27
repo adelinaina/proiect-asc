@@ -2,6 +2,8 @@ assume cs:code, ds:data
 data segment
 
     msg_input db 'Introduceti octetii in hex(8-16 valori): $'
+    msg_err db 13,10,'Numar invalid de octeti! $'
+
 
     ;buffer dos pentru citire(AH = 0Ah)
     inputBuf db 50
@@ -54,6 +56,10 @@ check_end:
     jb invalid 
     cmp al, '9'
     jbe digit1
+    cmp al, 'A'
+    jb invalid
+    cmp al, 'F'
+    ja invalid
     sub al, 'A'
     add al, 10
     jmp got1
@@ -73,6 +79,10 @@ got1:
     jb invalid
     cmp al, '9'
     jbe digit2
+    cmp al, 'A'
+    jb invalid
+    cmp al, 'F'
+    ja invalid
     sub al, 'A'
     add al, 10
     jmp got2
@@ -86,6 +96,9 @@ got2:
     or bl, al
     inc si
 
+    cmp cx, 16
+    jae end_read
+
     ;salvare octet
     mov [di], bl
     inc di
@@ -94,12 +107,29 @@ got2:
 
 invalid:
 
+    xor al, al
     inc si
     jmp read_loop
 
 end_read:
 
     mov countBytes, cl
+
+    ;validare valori 8-16
+    cmp cl, 8
+    jb bad_count
+    cmp cl, 16
+    ja bad_count
+    jmp exit
+
+bad_count:
+
+    mov dx, offset msg_err
+    mov ah, 09h
+    int 21h
+    
+
+exit:
 
     mov ax, 4C00h
     int 21h
