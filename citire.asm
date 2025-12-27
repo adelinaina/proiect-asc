@@ -1,5 +1,7 @@
 assume cs:code, ds:data
 include alexiaFunctions.asm
+include student2.asm
+
 
 data segment
 
@@ -22,6 +24,18 @@ data segment
     msg_binary      db 'In binar: $'
     msg_hex         db 'In hex: $'
     msg_press_key   db 'Apasa orice tasta... $'
+
+    ;Mesaje: Calcul C + Rotiri 
+    cuvant_C    dw 0
+    msg_C       db 13, 10, ' Student 2: Calcul C', 13, 10, 'Cuvantul C (Hex): $'
+    msg_rez     db 13, 10, ' Student 2: Rotiri (N=bit0+bit1) $'
+    msg_elem    db 13, 10, ' Elem: $'
+    msg_bin     db ' Bin: $'
+    msg_hex_lbl db ' Hex: $'
+    temp_byte   db 0
+    N_rotire    db 0
+    saved_cx    dw 0
+
 
 data ends
 
@@ -142,6 +156,8 @@ bad_count:
     int 21h
     
 
+
+
 exit:
 
     mov ax, 4C00h
@@ -149,6 +165,8 @@ exit:
 
 code ends
 end start
+
+
 
 
 
