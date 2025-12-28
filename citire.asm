@@ -1,7 +1,12 @@
 assume cs:code, ds:data
+include alexiaFunctions.asm
+include student2.asm
+
 data segment
 
     msg_input db 'Introduceti octetii in hex(8-16 valori): $'
+    msg_err db 13,10,'Numar invalid de octeti! $'
+
 
     ;buffer dos pentru citire(AH = 0Ah)
     inputBuf db 50
@@ -10,6 +15,25 @@ data segment
 
     hexArray db 16 dup(?) ;sirul de octeti convertiti
     countBytes db 0 ;numarul de octeti cititi
+
+    ;mesaje pentru afisari necesare
+    msg_sorted      db 'Sirul sortat: $'
+    msg_position    db 'Pozitia octetului: $'
+    msg_space  db '  $'
+    msg_binary      db 'In binar: $'
+    msg_hex         db 'In hex: $'
+    msg_press_key   db 'Apasa orice tasta... $'
+
+    ;Mesaje: Calcul C + Rotiri 
+    cuvant_C    dw 0
+    msg_C       db 13, 10, ' Student 2: Calcul C', 13, 10, 'Cuvantul C (Hex): $'
+    msg_rez     db 13, 10, ' Student 2: Rotiri (N=bit0+bit1) $'
+    msg_elem    db 13, 10, ' Elem: $'
+    msg_bin     db ' Bin: $'
+    msg_hex_lbl db ' Hex: $'
+    temp_byte   db 0
+    N_rotire    db 0
+    saved_cx    dw 0
 
 data ends
 
@@ -45,15 +69,21 @@ skip_spaces:
     jmp skip_spaces
 
 check_end:
-
+    
+    ;verificare sfarsit de linie(enter)
     cmp al, 0Dh
     je end_read
 
+    ;conversia primei cifre hex(jumatatea superioara de byte)
     mov al, [si]
     cmp al, '0'
     jb invalid 
     cmp al, '9'
     jbe digit1
+    cmp al, 'A'
+    jb invalid
+    cmp al, 'F'
+    ja invalid
     sub al, 'A'
     add al, 10
     jmp got1
@@ -68,11 +98,16 @@ got1:
     mov bl, al
     inc si
 
+    ;conversia celei de-a doua cifre hex(jumatatea inferioara de byte)
     mov al, [si]
     cmp al, '0'
     jb invalid
     cmp al, '9'
     jbe digit2
+    cmp al, 'A'
+    jb invalid
+    cmp al, 'F'
+    ja invalid
     sub al, 'A'
     add al, 10
     jmp got2
@@ -83,8 +118,11 @@ digit2:
 
 got2:
 
-    or bl, al
+    or bl, al ;combinarea jumatatilor
     inc si
+
+    cmp cx, 16 ;limitare la maxim 16 octeti
+    jae end_read
 
     ;salvare octet
     mov [di], bl
@@ -94,6 +132,7 @@ got2:
 
 invalid:
 
+    xor al, al
     inc si
     jmp read_loop
 
@@ -101,14 +140,26 @@ end_read:
 
     mov countBytes, cl
 
+    ;validare valori 8-16
+    cmp cl, 8
+    jb bad_count
+    cmp cl, 16
+    ja bad_count
+    jmp exit
+
+bad_count:
+
+    mov dx, offset msg_err
+    mov ah, 09h
+    int 21h
+    
+call PROCESS_STUDENT2
+exit:
+
     mov ax, 4C00h
     int 21h
 
 code ends
 end start
 
-
-
-
-
-
+;code alexia
