@@ -2,6 +2,7 @@ assume cs:code, ds:data
 include alexiaFunctions.asm
 include student2.asm
 
+
 data segment
 
     msg_input db 'Introduceti octetii in hex(8-16 valori): $'
@@ -34,6 +35,7 @@ data segment
     temp_byte   db 0
     N_rotire    db 0
     saved_cx    dw 0
+
 
 data ends
 
@@ -153,7 +155,9 @@ bad_count:
     mov ah, 09h
     int 21h
     
-call PROCESS_STUDENT2
+
+
+
 exit:
 
     mov ax, 4C00h
@@ -161,5 +165,17 @@ exit:
 
 code ends
 end start
+
+
+
+
+
+
+
+
+
+
+
+
 
 ;code alexia
