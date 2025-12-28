@@ -35,8 +35,9 @@ data segment
     saved_cx    dw 0
 
     ; Variabile auxiliare pentru Student 3
-    tempByte        db ?
-    tempPosition    db ?
+    tempByte       db ?
+    tempPosition   dw ?
+
     rotatedArray    db 16 dup(?)
 data ends
 
@@ -192,8 +193,9 @@ PROCESS_STUDENT2 proc
     push si
     push di
     cmp countBytes, 0       ; Verificam daca avem date
-    je final_student2_proc  ; (je = Jump if Equal), sărim direct la final
-
+    jne continua_student2  ; Daca NU este egal, mergi mai departe in cod
+    jmp final_student2_proc ; Daca ESTE egal, foloseste JMP (salt lung) pentru a iesi
+    continua_student2:
     ;CALCULUL CUVANTULUI C
     mov word ptr cuvant_C, 0
 
@@ -785,7 +787,9 @@ PRINT_POSITION_DECIMAL proc
     
 SINGLE_DIGIT:
     ; position is 0-9
-    mov dl, si
+    mov ax, si
+    mov dl, al
+
     add dl, '0'
     mov ah, 02h
     int 21h
@@ -829,9 +833,8 @@ DISPLAY_SORTED_ARRAY proc
     call FIND_BYTE_WITH_MOST_BITS
     ; now we have: si = position, al = byte value, cl = bit count
     
-    ; save byte value for possible later use
-    mov byte ptr [tempByte], al
-    mov byte ptr [tempPosition], si
+    ; save byte value for later display
+    mov tempByte, al
     
     ; print position message
     mov dx, offset msg_position
@@ -840,7 +843,6 @@ DISPLAY_SORTED_ARRAY proc
     ; print the position as decimal number (0-15)
     call PRINT_POSITION_DECIMAL
     
-    ; optional: print byte value in hex (daca vrei sa afisezi si valoarea)
     ; print newline first
     call PRINT_NEWLINE
     
@@ -849,7 +851,7 @@ DISPLAY_SORTED_ARRAY proc
     call PRINT_STRING
     
     ; print the byte value in hex
-    mov al, byte ptr [tempByte]
+    mov al, tempByte
     call PRINT_HEX_BYTE
     
     ; print final newline
@@ -862,8 +864,7 @@ DISPLAY_SORTED_ARRAY proc
     pop bx
     pop ax
     ret
-DISPLAY_SORTED_ARRAY endp 
-
+DISPLAY_SORTED_ARRAY endp
 
 
 code ends
