@@ -193,8 +193,9 @@ PROCESS_STUDENT2 proc
     push si
     push di
     cmp countBytes, 0       ; Verificam daca avem date
-    je final_student2_proc  ; (je = Jump if Equal), sărim direct la final
-
+    jne continua_student2  ; Daca NU este egal, mergi mai departe in cod
+    jmp final_student2_proc ; Daca ESTE egal, foloseste JMP (salt lung) pentru a iesi
+    continua_student2:
     ;CALCULUL CUVANTULUI C
     mov word ptr cuvant_C, 0
 
