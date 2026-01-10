@@ -1,165 +1,136 @@
-Prelucrarea și Analiza unui Șir de Octeți în Assembly 8086
+**Prelucrarea și Analiza unui Șir de Octeți în Assembly 8086**
 
 
-Descriere generală
+**Descriere generală**
 
 Acest proiect implementează un program complet funcțional în limbaj de asamblare 8086, capabil să prelucreze un șir de octeți introduși în format hexazecimal. Programul integrează operații pe biți, conversii numerice, două metode de sortare, analiză asupra structurii octeților și afișare formatată. Structura modulară permite extinderea și întreținerea facilă a codului.
 
 
-Obiectivele proiectului
+**Obiectivele proiectului**
 
-Citirea și validarea unui șir de 8–16 octeți în format hexazecimal
-
-Conversia sirului hex în valori binare reale
-
-Calculul unui cuvânt de 16 biți pe baza operațiilor pe biți
-
-Aplicarea de rotiri logice asupra fiecărui octet
-
-Sortarea șirului folosind două metode diferite
-
-Identificarea octetului cu cei mai mulți biți setați la 1
-
-Afișarea rezultatelor într-un format clar și structurat
+* Citirea și validarea unui șir de 8–16 octeți în format hexazecimal
+* Conversia sirului hex în valori binare reale
+* Calculul unui cuvânt de 16 biți pe baza operațiilor pe biți
+* Aplicarea de rotiri logice asupra fiecărui octet
+* Sortarea șirului folosind două metode diferite
+* Identificarea octetului cu cei mai mulți biți setați la 1
+* Afișarea rezultatelor într-un format clar și structurat
 
 
-Arhitectura programului
+**Arhitectura programului**
 
 Programul este împărțit în patru module principale, fiecare implementat prin proceduri independente.
 
 
-1. Student 1 - Modulul de citire și conversie
+**1. Student 1 - Modulul de citire și conversie**
    
 Responsabilități:
 
-citirea inputului utilizatorului folosind bufferul DOS
+- citirea inputului utilizatorului folosind bufferul DOS
 
-eliminarea spațiilor și a caracterelor invalide
+- eliminarea spațiilor și a caracterelor invalide
 
-conversia fiecărei perechi de cifre hex în octeți
+- conversia fiecărei perechi de cifre hex în octeți
 
-validarea numărului de octeți (minim 8, maxim 16)
+- validarea numărului de octeți (minim 8, maxim 16)
 
 Acest modul asigură integritatea datelor înainte de procesare.
 
 
-2. Student 2 – Operații pe biți
+**2. Student 2 – Operații pe biți**
    
-2.1 Calculul cuvântului C (16 biți)
+**2.1 Calculul cuvântului C (16 biți)**
    
 Cuvântul C este construit din trei componente:
 
-Biții 0–3: XOR între nibble-ul inferior al primului octet și nibble-ul superior al ultimului octet
+- Biții 0–3: XOR între nibble-ul inferior al primului octet și nibble-ul superior al ultimului octet
 
-Biții 4–7: OR între nibble-urile obținute prin deplasarea fiecărui octet cu 2 biți la dreapta
+- Biții 4–7: OR între nibble-urile obținute prin deplasarea fiecărui octet cu 2 biți la dreapta
 
-Biții 8–15: suma tuturor octeților modulo 256
+- Biții 8–15: suma tuturor octeților modulo 256
 
 Rezultatul este afișat în hexazecimal.
 
 
-2.2 Rotirea fiecărui octet
+**2.2 Rotirea fiecărui octet**
 
 Pentru fiecare octet se calculează:
 
-N = bit0 + bit1
+- N = bit0 + bit1
 
-se aplică o rotire la stânga cu N poziții
+- se aplică o rotire la stânga cu N poziții
 
-se afișează rezultatul în hex și binar
+- se afișează rezultatul în hex și binar
 
 Acest modul demonstrează utilizarea operațiilor logice și aritmetice pe biți.
 
 
-3. Student 3 – Sortare și analiză
+**3. Student 3 – Sortare și analiză**
    
-3.1 Sortarea descrescătoare (Bubble Sort)
+**3.1 Sortarea descrescătoare (Bubble Sort)**
    
 Metoda implicită de sortare:
 
-compară elemente consecutive
+- compară elemente consecutive
+- le interschimbă dacă sunt în ordine greșită
+- se oprește devreme dacă nu au avut loc schimbări
 
-le interschimbă dacă sunt în ordine greșită
-
-se oprește devreme dacă nu au avut loc schimbări
-
-3.2 Identificarea octetului cu cei mai mulți biți de 1
+**3.2 Identificarea octetului cu cei mai mulți biți de 1**
 
 Programul:
 
-numără biții setați pentru fiecare octet
-
-ignoră octeții cu ≤ 3 biți de 1
-
-selectează octetul cu numărul maxim de biți 1
-
-afișează poziția și valoarea acestuia
+* numără biții setați pentru fiecare octet
+* ignoră octeții cu ≤ 3 biți de 1
+* selectează octetul cu numărul maxim de biți 1
+* afișează poziția și valoarea acestuia
 
 
-4. Student 4 – Metodă alternativă de sortare (Shell Sort)
+**4. Student 4 – Metodă alternativă de sortare (Shell Sort)**
    
-Pe lângă sortarea implicită, proiectul include o metodă alternativă:
+Pe lângă sortarea implicită, proiectul include o metodă alternativă - Shell Sort (descrescător):
+- mai eficient decât Bubble Sort
+- nu folosește recursivitate
+- ideal pentru vectori mici (8–16 elemente)
+- utilizează o secvență descrescătoare de „gap”-uri pentru optimizarea comparațiilor
 
-Shell Sort (descrescător)
-mai eficient decât Bubble Sort
 
-nu folosește recursivitate
+**Selectarea metodei de sortare**
 
-ideal pentru vectori mici (8–16 elemente)
-
-utilizează o secvență descrescătoare de „gap”-uri pentru optimizarea comparațiilor
-
-Selectarea metodei de sortare
 Programul permite alegerea metodei printr-o variabilă internă:
 
-0 → Bubble Sort (implicit)
-
-1 → Shell Sort
+- 0 → Bubble Sort (implicit)
+- 1 → Shell Sort
 
 Această flexibilitate demonstrează extensibilitatea și modularitatea proiectului.
 
 
-Fluxul complet al execuției
+**Fluxul complet al execuției**
 
-Citirea șirului de octeți în format hex
-
-Conversia în octeți reali
-
-Validarea numărului de elemente
-
-Calculul cuvântului C
-
-Aplicarea rotirilor pe biți
-
-Selectarea metodei de sortare
-
-Sortarea șirului
-
-Afișarea șirului sortat
-
-Identificarea octetului cu cei mai mulți biți 1
-
-Afișarea poziției și valorii acestuia
-
-Finalizarea programului
+* Citirea șirului de octeți în format hex
+* Conversia în octeți reali
+* Validarea numărului de elemente
+* Calculul cuvântului C
+* Aplicarea rotirilor pe biți
+* Selectarea metodei de sortare
+* Sortarea șirului
+* Afișarea șirului sortat
+* Identificarea octetului cu cei mai mulți biți 1
+* Afișarea poziției și valorii acestuia
+* Finalizarea programului
 
 
-Funcționalități auxiliare
+**Funcționalități auxiliare**
 
 Programul include proceduri dedicate pentru:
 
-afișarea unui octet în hexazecimal
-
-afișarea unui octet în binar
-
-afișarea unui cuvânt (16 biți) în hex
-
-afișarea unui șir terminat cu caracterul $
-
-afișarea unui newline
-
-afișarea poziției în zecimal
-
-numărarea biților de 1
+* afișarea unui octet în hexazecimal
+* afișarea unui octet în binar
+* afișarea unui cuvânt (16 biți) în hex
+* afișarea unui șir terminat cu caracterul $
+* afișarea unui newline
+* afișarea poziției în zecimal
+* numărarea biților de 1
 
 Aceste proceduri contribuie la claritatea și modularitatea codului.
+
+![Diagrama bloc Assembly](diagrama_bloc.png)
