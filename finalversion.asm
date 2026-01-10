@@ -39,6 +39,9 @@ data segment
     tempPosition   dw ?
 
     rotatedArray    db 16 dup(?)
+
+    ;variabile pentru student 4
+    sortMethod db 0 ;0 - bubble sort, 1 - shell sort
 data ends
 
 code segment
@@ -751,9 +754,6 @@ HEX_DISPLAY_COMPLETE:
 PRINT_HEX_ARRAY endp
 
 
-
-
-
 ; displays position as decimal number (0-15)
 ; Input: si = position (0-based index)
 ; Output: displays decimal number on screen
@@ -805,6 +805,79 @@ PRINT_POSITION_DECIMAL endp
 
 
 
+; SHELL SORT – sortare descrescătoare pentru hexArray (Student 4)
+; Input:  hexArray – vectorul de octeți
+;         countBytes – numărul de elemente
+; Output: hexArray sortat descrescător
+
+SHELL_SORT_HEXARRAY proc
+    push ax
+    push bx
+    push cx
+    push dx
+    push si
+    push di
+
+    mov cx, countBytes
+    cmp cx, 2
+    jb SHELL_DONE        ; dacă avem 0 sau 1 element, nu sortăm
+
+    ; gap inițial = countBytes / 2
+    mov ax, cx
+    shr ax, 1
+    mov bx, ax           ; BX = gap
+
+SHELL_GAP_LOOP:
+    cmp bx, 0
+    je SHELL_DONE
+
+    mov si, bx           ; începem de la indexul = gap
+
+SHELL_INSERT_LOOP:
+    mov al, hexArray[si] ; elementul curent
+    mov di, si
+
+SHELL_SHIFT_LOOP:
+    sub di, bx           ; di = di - gap
+    cmp di, 0
+    jb SHELL_INSERT_DONE ; dacă am ieșit din vector, ne oprim
+
+    mov dl, hexArray[di] ; elementul cu gap în urmă
+
+    ; sortare DESCRESCĂTOARE → dacă dl < al, mutăm dl în față
+    cmp dl, al
+    jae SHELL_INSERT_DONE
+
+    ; mutăm elementul mai mic în poziția curentă
+    add di, bx
+    mov hexArray[di], dl
+    sub di, bx
+    jmp SHELL_SHIFT_LOOP
+
+SHELL_INSERT_DONE:
+    add di, bx
+    mov hexArray[di], al ; inserăm elementul la poziția corectă
+
+    inc si
+    cmp si, countBytes
+    jb SHELL_INSERT_LOOP
+
+    ; gap = gap / 2
+    shr bx, 1
+    jmp SHELL_GAP_LOOP
+
+SHELL_DONE:
+    pop di
+    pop si
+    pop dx
+    pop cx
+    pop bx
+    pop ax
+    ret
+SHELL_SORT_HEXARRAY endp
+
+
+
 ; main function for Student 3: sorts array and displays results
 ; calls all necessary functions in correct order
 
@@ -819,10 +892,23 @@ DISPLAY_SORTED_ARRAY proc
     ; print message for sorted array
     mov dx, offset msg_sorted
     call PRINT_STRING
-    
-    ; sort the array in descending order
+
+    ; Selectarea metodei de sortare
+    ; sortMethod = 0 → Bubble Sort
+    ; sortMethod = 1 → Shell Sort
+
+    cmp sortMethod, 0
+    je USE_BUBBLE_SORT
+
+    ; Dacă sortMethod = 1 → Shell Sort
+    call SHELL_SORT_HEXARRAY
+    jmp SORT_DONE
+
+USE_BUBBLE_SORT:
     call SORT_DESCENDING_HEXARRAY
-    
+
+SORT_DONE:
+
     ; display sorted array in hexadecimal format
     call PRINT_HEX_ARRAY
     
