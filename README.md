@@ -134,3 +134,12 @@ Programul include proceduri dedicate pentru:
 Aceste proceduri contribuie la claritatea și modularitatea codului.
 
 ![Diagrama bloc Assembly](diagrama_bloc.png)
+
+
+**Probleme întâmpinate**
+
+**Student 1:** înțelegerea modului de citire a datelor folosind bufferul DOS și tratarea corectă a cazurilor de input greșit în Assembly.În plus, lucrul cu Git Bash a fost o provocare la început,mai ales salvarea modificărilor.
+**Student 2:** Calculul eficient al sumei modulo 256.
+O provocare a fost implementarea sumei tuturor octeților „modulo 256” fără a complica codul cu instrucțiuni de împărțire (DIV) am folosit o soluție simplă direct din regiștri. Am adunat totul, iar la final am păstrat doar octetul AL (un octet ține maxim 255, orice depășire se elimină automat, așa că am obținut restul împărțirii direct)
+**Student 3:** Implementarea algoritmului Bubble sort a fost o provocare din cauza gestionării fluxului de date și a operațiilor de comparare la nivel de octet, iar conversiile între reprezentări numerice au fost mai dificile de asemenea, implicând manipulări precise la nivel de biți și transformări aritmetice pentru generarea corectă a formatelor de ieșire cerute.
+**Student 4:** Provocarea pentru shell sort a fost gestionarea corectă a indexării cu gap-uri variabile, specifică algoritmului Shell Sort, pentru că spre deosebire de sortările simple, Shell Sort presupune accesarea elementelor aflate la distanțe mari între ele, iar în Assembly acest lucru necesită o atenție deosebită pentru a evita ieșirea din limitele vectorului. 
